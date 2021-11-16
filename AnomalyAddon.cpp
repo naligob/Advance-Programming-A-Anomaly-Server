@@ -2,7 +2,6 @@
 #include <string>
 #include "AnomalyAlg.h"
 
-// native C++ function that is assigned to 'greetHello' property on 'exports' objexct
 Napi::Array simpleDetect(const Napi::CallbackInfo& info) {
     
     Napi::Env env = info.Env();

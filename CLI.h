@@ -11,6 +11,9 @@ using namespace std;
 class CLI {
 	DefaultIO* dio;
 	// you can add data members
+	Command** commands;
+	int size;
+	void printCommands();
 public:
 	CLI(DefaultIO* dio);
 	void start();
