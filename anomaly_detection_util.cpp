@@ -1,48 +1,76 @@
-/*
- * animaly_detection_util.cpp
- *
- * Author: write your ID and name here
- */
-
-#include <math.h>
+#include <iostream>
+#include <string>
+#include <cmath>
 #include "anomaly_detection_util.h"
 
+// returns the expectation of value 
+float valOfExpectation(float* x,int size);
+
 float avg(float* x, int size){
-	return 0;
+    return 0;
 }
 
-// returns the variance of X and Y
+float valOfExpectation(float* x,int size){
+    float sum = 0;   // need to check if the defult is ok
+    for (int i = 0; i < size; i++){
+        sum += x[i];
+    }
+  
+    return sum / size; 
+}
+
 float var(float* x, int size){
-	return 0;
+    float sum = 0;
+    for (int i = 0; i < size; i++){
+        sum += std::pow(x[i] - valOfExpectation(x , size),2);
+
+    }
+    
+    return sum / size;
 }
 
-// returns the covariance of X and Y
 float cov(float* x, float* y, int size){
-	return 0;
+    float multy = 0;
+    float xMid = valOfExpectation(x ,size);
+    float yMid = valOfExpectation(y , size);
+    for (int i = 0; i < size; i++){
+        multy += (x[i] - xMid) * (y[i] - yMid);
+    }
+
+    return multy / size;
 }
 
-
-// returns the Pearson correlation coefficient of X and Y
 float pearson(float* x, float* y, int size){
-	return 0;
+    
+    return cov(x,y,size) / std::sqrt(var(x,size)*var(y,size));   
 }
 
-// performs a linear regression and returns the line equation
-Line linear_reg(Point** points, int size){
+Line linear_reg(Point** points,int size){
+    float arrX[3000] , arrY[3000];
+    for(int i =0;i < size; i++){
+        arrX[i] = points[i]->x;
+        arrY[i] = points[i]->y;
+    }
 
-	return Line(0,0);
+    float a = cov(arrX,arrY,size) / var(arrX,size);
+
+    float xMid = valOfExpectation(arrX , size);
+    float yMid = valOfExpectation(arrY , size);
+    
+    float b = yMid - a * xMid;
+
+    return Line(a , b);
 }
 
-// returns the deviation between point p and the line equation of the points
-float dev(Point p,Point** points, int size){
-	return 0;
+float dev(Point p,Point** points,int size){
+    Line line = linear_reg(points,size);
+    
+    return dev(p , line);
 }
 
-// returns the deviation between point p and the line
-float dev(Point p,Line l){
-	return 0;
+float dev(Point p, Line l){
+
+    return std::abs(l.f(p.x)-p.y);
 }
-
-
 
 
